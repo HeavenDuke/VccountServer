@@ -39,12 +39,13 @@ class Server extends Koa {
     }
 
     initUtils() {
-        require('../libs/date')();
+        require('../libs').date();
     }
 
     initGlobalVariables() {
         global.conf = this.opts;
         global.database = require('../database').loader;
+        global.response = require('../libs').response;
     }
 }
 

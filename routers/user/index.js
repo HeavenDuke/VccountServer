@@ -10,13 +10,15 @@ let router = new Router({
 
 let sessionRouter = require('./session');
 
+let authentication = require('../../middlewares').authentication;
+
 let userController = require('../../controllers').users;
 
-router.post('users-create', '/', userController.create);
+router.post('users-create', '/', authentication.guest_only, userController.create);
 
-router.get('users-show', '/', userController.show);
+router.get('users-show', '/', authentication.user_only, userController.show);
 
-router.put('users-edit', '/', userController.update);
+router.put('users-edit', '/', authentication.user_only, userController.update);
 
 routeUtils.stack(router, "/", sessionRouter);
 

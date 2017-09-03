@@ -9,14 +9,16 @@ let router = new Router({
 
 let accountController = require('../../controllers').accounts;
 
-router.get('account-index', '/', accountController.index);
+let authentication = require('../../middlewares').authentication;
 
-router.get('account-show', '/:accountId', accountController.show);
+router.get('account-index', '/', authentication.user_only, accountController.index);
 
-router.post('account-create', '/', accountController.create);
+router.get('account-show', '/:accountId', authentication.owner_only, accountController.show);
 
-router.put('account-update', '/:accountId', accountController.update);
+router.post('account-create', '/', authentication.user_only, accountController.create);
 
-router.delete('account-destroy', '/:accountId', accountController.destroy);
+router.put('account-update', '/:accountId', authentication.owner_only, accountController.update);
+
+router.delete('account-destroy', '/:accountId', authentication.owner_only, accountController.destroy);
 
 module.exports = router;

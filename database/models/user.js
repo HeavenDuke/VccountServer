@@ -12,12 +12,6 @@ let User = new Schema({
         required: true,
         unique: true
     },
-    telephone: {
-        type: String,
-        require: true,
-        unique: true,
-        match: /^1[34578]\d{9}$/
-    },
     email: {
         type: String,
         required: true,
@@ -28,12 +22,7 @@ let User = new Schema({
         type: String,
         required: true
     },
-    created_at: {
-        type: Date,
-        required: true,
-        default: Date.now
-    },
-    last_login_at: {
+    createdAt: {
         type: Date,
         required: true,
         default: Date.now

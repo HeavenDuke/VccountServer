@@ -12,6 +12,11 @@ let Session = {
         type: Number,
         required: true,
         default: 60 * 60 * 24 * 7
+    },
+    createdAt: {
+        type: Date,
+        required: true,
+        default: Date.now
     }
 };
 
