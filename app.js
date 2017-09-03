@@ -2,20 +2,15 @@
  * Created by heavenduke on 17-8-29.
  */
 
-let session = require('koa-session');
-let redisStore = require('koa-redis');
-let Koa = require('koa');
+let Server = require('./server');
+let options = require('./config')(process.env.environment);
 
-let app = new Koa();
-app.keys = ['vccount-server-heavenduke'];
+let server = new Server(options);
 
-app.use(session({
-    store: redisStore({
-        // Options specified here
-    })
-}, app));
+server.initUtils();
 
+server.connectDb();
 
-app.listen(3001, () => {
-    console.log(`Server listening at port ${3001}`)
-});
+server.initGlobalVariables();
+
+server.start();
