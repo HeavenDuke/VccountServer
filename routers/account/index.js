@@ -13,12 +13,12 @@ let authentication = require('../../middlewares').authentication;
 
 router.get('account-index', '/', authentication.user_only, accountController.index);
 
-router.get('account-show', '/:accountId', authentication.owner_only, accountController.show);
+router.get('account-show', '/:accountId', authentication.user_only, accountController.show);
 
 router.post('account-create', '/', authentication.user_only, accountController.create);
 
-router.put('account-update', '/:accountId', authentication.owner_only, accountController.update);
+router.put('account-update', '/:accountId', authentication.user_only, accountController.update);
 
-router.delete('account-destroy', '/:accountId', authentication.owner_only, accountController.destroy);
+router.delete('account-destroy', '/:accountId', authentication.user_only, accountController.destroy);
 
 module.exports = router;

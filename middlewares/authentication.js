@@ -28,18 +28,3 @@ exports.user_only = async (ctx, next) => {
         await next();
     }
 };
-
-exports.owner_only = async (ctx, next) => {
-    let User = global.database.models.user;
-    let user = await User.findOne({
-        session: {
-            _id: ctx.request.body.access_token,
-        }
-    });
-    if (!user || user.session.createdAt + user.session.expiresAt > Date.now()) {
-        ctx.body = global.error(401, "you have already signed in!");
-    }
-    else {
-        await next();
-    }
-};
