@@ -38,10 +38,19 @@ exports.update = async (ctx, next) => {
         ctx.current_user.username = ctx.request.body.username;
     }
     if (ctx.request.body.password) {
-        if (ctx.request.body.password == ctx.request.body.confirmPassword) {
-            ctx.current_user.password = ctx.request.body.password;
+        if (ctx.current_user.verifyPassword(ctx.request.body.password)) {
+            if (ctx.request.body.newPassword == ctx.request.body.confirmPassword) {
+                ctx.current_user.encryptedPassword = User.generatePassword(ctx.request.body.newPassword);
+            }
+            else {
+                ctx.body = global.response.error(401, "unmatch password");
+            }
+        }
+        else {
+            ctx.body = global.response.error(401, "wrong password");
         }
     }
+
     await ctx.current_user.save();
     ctx.body = global.response.success(200, "sucecss", {
         username: ctx.current_user.username,

@@ -3,3 +3,5 @@
  */
 
 exports.authentication = require('./authentication');
+
+exports.ajax = require('./ajax');

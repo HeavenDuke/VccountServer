@@ -5,9 +5,10 @@
 let Koa = require('koa');
 let mongoose = require('mongoose');
 
-let redisStore = require('koa-redis');
-let session = require('koa-session');
+let cors = require('koa-cors');
 let bodyParser = require('koa-bodyparser');
+let convert = require('koa-convert');
+
 let routeUtils = require('../libs').routeUtils;
 let router = require('../routers');
 
@@ -22,6 +23,8 @@ class Server extends Koa {
         //     maxAge: 60 * 60 * 1000 * 24 * 30,
         //     store: redisStore({})
         // }, this));
+
+        this.use(convert(cors()));
 
         this.use(bodyParser({
             formLimit: "100mb",
