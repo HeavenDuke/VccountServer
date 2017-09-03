@@ -31,14 +31,18 @@ let User = new Schema({
     session: require('./session')
 }, {collection: 'Users'});
 
-User.virtual('password').
-    get(() => {
-        return {
-            randStr: this.encryptedPassword.split("$")[1],
-            encrypted: this.encryptedPassword.split("$")[2]
-        };
-    }).
-    set((value) => {
+User.methods.verifyPassword = function (password) {
+    let md5 = crypto.createHash('md5');
+    let data = {
+        randStr: this.encryptedPassword.split("$")[1],
+        encrypted: this.encryptedPassword.split("$")[2],
+    };
+    md5.update(`${password}${data.randStr}`);
+    return md5.digest('hex') == data.encrypted;
+};
+
+User.statics = {
+    generatePassword: (value) => {
         let md5 = crypto.createHash('md5');
         let randStrGenerator = (len) => {
             let rand_int = (min, max) => {
@@ -53,13 +57,8 @@ User.virtual('password').
         };
         let randStr = randStrGenerator(6);
 
-        this.encryptedPassword = md5.digest(`md5$${randStr}$${md5.digest(`${value}${randStr}`)}`);
-    });
-
-User.methods = {
-    verifyPassword: (password)=> {
-        let md5 = crypto.createHash('md5');
-        return md5.digest(`${password}${this.password.randStr}`) == this.password.encrypted;
+        md5.update(`${value}${randStr}`);
+        return `md5$${randStr}$${md5.digest('hex')}`;
     }
 };
 

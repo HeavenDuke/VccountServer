@@ -3,27 +3,37 @@
  */
 
 let Koa = require('koa');
-let session = require('koa-session');
 let mongoose = require('mongoose');
+
 let redisStore = require('koa-redis');
+let session = require('koa-session');
+let bodyParser = require('koa-bodyparser');
 let routeUtils = require('../libs').routeUtils;
 let router = require('../routers');
 
 class Server extends Koa {
     constructor(options) {
         super();
-        this.opts = options || {}
+        this.opts = options || {};
+
+        this.keys = ['vccount-server-heavenduke'];
+
+        // this.use(session({
+        //     maxAge: 60 * 60 * 1000 * 24 * 30,
+        //     store: redisStore({})
+        // }, this));
+
+        this.use(bodyParser({
+            formLimit: "100mb",
+            jsonLimit: "100mb",
+            textLimit: "100mb"
+        }));
+
+        routeUtils.mount(this, router);
+
     }
 
     start() {
-        this.keys = ['vccount-server-heavenduke'];
-
-        this.use(session({
-            maxAge: 60 * 60 * 1000 * 24 * 30,
-            store: redisStore({})
-        }, this));
-
-        routeUtils.mount(this, router);
 
         this.listen(this.opts.server.port, () => {
             console.log(`Server listening at port ${this.opts.server.port}`)

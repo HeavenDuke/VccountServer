@@ -5,11 +5,9 @@
 exports.guest_only = async (ctx, next) => {
     let User = global.database.models.user;
     let user = await User.findOne({
-        session: {
-            _id: ctx.request.body.access_token,
-        }
+        'session._id': ctx.request.body.access_token ? ctx.request.body.access_token : ctx.query.access_token,
     });
-    if (user && user.session.createdAt + user.session.expiresAt > Date.now()) {
+    if (user && Date.parse(user.session.createdAt) + user.session.expiresAt > Date.now()) {
         ctx.body = global.response.error(401, "you have already signed in!");
     }
     else {
@@ -20,11 +18,9 @@ exports.guest_only = async (ctx, next) => {
 exports.user_only = async (ctx, next) => {
     let User = global.database.models.user;
     let user = await User.findOne({
-        session: {
-            _id: ctx.request.body.access_token,
-        }
+        'session._id': ctx.request.body.access_token ? ctx.request.body.access_token : ctx.query.access_token,
     });
-    if (!user || user.session.createdAt + user.session.expiresAt < Date.now()) {
+    if (!user || Date.parse(user.session.createdAt) + user.session.expiresAt < Date.now()) {
         ctx.body = global.response.error(401, "you haven't signed in!");
     }
     else {

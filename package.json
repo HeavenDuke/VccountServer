@@ -18,6 +18,7 @@
   "homepage": "https://github.com/HeavenDuke/VccountServer#readme",
   "dependencies": {
     "koa": "^2.3.0",
+    "koa-bodyparser": "^4.2.0",
     "koa-redis": "^3.0.0",
     "koa-router": "^7.2.1",
     "koa-session": "^5.5.0",

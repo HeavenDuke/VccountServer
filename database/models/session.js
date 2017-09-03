@@ -9,12 +9,12 @@ let Session = new Schema({
     expiresAt: {
         type: Number,
         required: true,
-        default: 60 * 60 * 24
+        default: 60 * 60 * 24 * 1000
     },
     refreshableAt: {
         type: Number,
         required: true,
-        default: 60 * 60 * 24 * 7
+        default: 60 * 60 * 24 * 7 * 1000
     },
     createdAt: {
         type: Date,

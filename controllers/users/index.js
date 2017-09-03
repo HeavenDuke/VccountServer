@@ -8,14 +8,14 @@ exports.create = async (ctx, next) => {
         let user = await new User({
             username: ctx.request.body.username,
             email: ctx.request.body.email,
-            password: ctx.request.body.password,
+            encryptedPassword: User.generatePassword(ctx.request.body.password),
+            session: {}
         });
-        user.session = await User.session.create({});
         await user.save();
         ctx.body = global.response.success(200, "success", {
             username: user.username,
             email: user.email,
-            access_token: user.session._id
+            session: user.session
         });
     }
     else {
@@ -32,14 +32,14 @@ exports.show = async (ctx, next) => {
 
 exports.update = async (ctx, next) => {
     if (ctx.request.body.email) {
-        ctx.current_user.email = ctx.requst.body.email;
+        ctx.current_user.email = ctx.request.body.email;
     }
     if (ctx.request.body.username) {
-        ctx.current_user.username = ctx.requst.body.username;
+        ctx.current_user.username = ctx.request.body.username;
     }
     if (ctx.request.body.password) {
         if (ctx.request.body.password == ctx.request.body.confirmPassword) {
-            ctx.current_user.password = ctx.requst.body.password;
+            ctx.current_user.password = ctx.request.body.password;
         }
     }
     await ctx.current_user.save();

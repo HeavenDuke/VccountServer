@@ -4,11 +4,11 @@
 
 exports.create = async (ctx, next) => {
     let User = global.database.models.user;
-    let user = await new User({
+    let user = await User.findOne({
         email: ctx.request.body.email
     });
-    if (user && user.verifyPassword(ctx.requst.body.password)) {
-        user.session = await User.session.create({});
+    if (user && user.verifyPassword(ctx.request.body.password)) {
+        user.session = {};
         await user.save();
         ctx.body = global.response.success(200, "success", {
             username: user.username,
@@ -23,14 +23,11 @@ exports.create = async (ctx, next) => {
 
 exports.update = async (ctx, next) => {
     let User = global.database.models.user;
-    let user = await new User({
-        email: ctx.request.body.email,
-        session: {
-            _id: ctx.request.body.access_token
-        }
+    let user = await User.findOne({
+        'session._id': ctx.request.body.access_token
     });
-    if (user && user.session.createdAt + user.session.refreshableAt > Date.now()) {
-        user.session = await User.session.create({});
+    if (user && Date.parse(user.session.createdAt) + user.session.refreshableAt > Date.now()) {
+        user.session = {};
         await user.save();
         ctx.body = global.response.success(200, "success", {
             username: user.username,
@@ -39,6 +36,6 @@ exports.update = async (ctx, next) => {
         });
     }
     else {
-        ctx.body = global.response.error(401, "Incorrect Access Token");
+        ctx.body = global.response.error(401, "Invalid Access Token");
     }
 };
