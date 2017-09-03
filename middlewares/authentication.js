@@ -28,6 +28,7 @@ exports.user_only = async (ctx, next) => {
         ctx.body = global.response.error(401, "you haven't signed in!");
     }
     else {
+        ctx.current_user = user;
         await next();
     }
 };

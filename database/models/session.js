@@ -2,7 +2,10 @@
  * Created by heavenduke on 17-9-3.
  */
 
-let Session = {
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
+
+let Session = new Schema({
     expiresAt: {
         type: Number,
         required: true,
@@ -18,6 +21,6 @@ let Session = {
         required: true,
         default: Date.now
     }
-};
+});
 
 module.exports = Session;

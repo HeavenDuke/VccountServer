@@ -2,7 +2,10 @@
  * Created by heavenduke on 17-8-29.
  */
 
-let Account = {
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
+
+let Account = new Schema({
     budget: {
         type: Number,
         required: true
@@ -23,6 +26,6 @@ let Account = {
         type: String,
         required: true
     }
-};
+});
 
 module.exports = Account;
