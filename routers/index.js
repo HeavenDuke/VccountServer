@@ -11,7 +11,7 @@ let accountRouter = require('./account');
 
 let ajax = require('../libs').ajax;
 
-router.use()
+// router.use()
 
 routeUtils.stack(router, "/", userRouter);
 routeUtils.stack(router, "/", accountRouter);
